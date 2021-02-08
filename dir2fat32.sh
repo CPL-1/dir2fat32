@@ -100,7 +100,7 @@ filesize() {
 }
 
 mkcontainer() {
-  fallocate -l ${DISK_SIZE}M "$OUTPUT"
+  dd if=/dev/zero bs=1M count=0 seek=${DISK_SIZE} "of=$OUTPUT"
   echo "$NEW_DISKLABEL
 $NEW_PARTITION
 $PRIMARY
@@ -114,7 +114,7 @@ $WRITE
 }
 
 mkpartition() {
-  fallocate -l ${SIZE}M "$PARTITION"
+  dd if=/dev/zero bs=1M count=0 seek=${SIZE} of="$PARTITION"
   mkfs.fat -F32 -S"$LOGICAL_SECTOR_SIZE" "$PARTITION" >/dev/null
 }
 
@@ -201,3 +201,4 @@ insertpart
 echo "===> Removing partition image file"
 rm -f "$PARTITION"
 echo "===> DONE"
+
